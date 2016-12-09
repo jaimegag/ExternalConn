@@ -1,0 +1,2 @@
+externalConn:
+  url: https://httpbin.org/get

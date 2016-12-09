@@ -1,5 +1,6 @@
 package io.pivotal.demo.externalConn;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.stereotype.Controller;
@@ -17,6 +18,9 @@ import java.io.IOException;
 @Controller
 public class MainController {
 
+    @Value("${externalConn.url}")
+    String externalConnUrl;
+
     @RequestMapping("/")
     public String index(Model model) {
         RestTemplate template = new RestTemplate();
@@ -28,7 +32,7 @@ public class MainController {
             }
         };
         template.setErrorHandler(responseErrorHandler);
-        ResponseEntity<String> content = template.getForEntity("https://httpbin.org/get",String.class);
+        ResponseEntity<String> content = template.getForEntity(this.externalConnUrl, String.class);
         if (content.getStatusCodeValue() > 208) {
             model.addAttribute("content", "AN ERROR HAS OCCURRED CALLING THE EXTERNAL SERVICE: - code <" + content.getStatusCode() + "> message <" + content.getBody() + ">");
         }
